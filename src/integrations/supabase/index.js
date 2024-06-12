@@ -166,3 +166,5 @@ export const useDeleteComment = () => {
         },
     });
 };
+
+export { useSupabaseAuth } from './auth.jsx';
