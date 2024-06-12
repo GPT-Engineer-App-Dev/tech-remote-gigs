@@ -1,10 +1,10 @@
 import { useParams } from "react-router-dom";
 import { Container, Box, Text, VStack } from "@chakra-ui/react";
-import { useJob } from "../integrations/supabase/index.js"; // Import the useJob hook
+import { useJob } from "../integrations/supabase/index.js";
 
 const JobDetails = () => {
   const { id } = useParams();
-  const { data: job, isLoading, isError } = useJob(id); // Fetch job details from Supabase
+  const { data: job, isLoading, isError } = useJob(id);
 
   if (isLoading) {
     return <Text>Loading...</Text>;
