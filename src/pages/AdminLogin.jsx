@@ -10,11 +10,15 @@ const AdminLogin = () => {
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) {
       setError(error.message);
     } else {
-      navigate("/");
+      const user = supabase.auth.user();
+      if (user) {
+        user.role = 'admin'; // Set the user's role to 'admin'
+        navigate("/");
+      }
     }
   };
 
