@@ -1,19 +1,24 @@
 import { useState } from "react";
 import { Container, VStack, HStack, Button, Box, Text, SimpleGrid } from "@chakra-ui/react";
-import { Link } from "react-router-dom"; // Import Link from react-router-dom
+import { Link } from "react-router-dom";
+import { useJobs } from "../integrations/supabase/index.js"; // Import the useJobs hook
 
-const jobList = [
-  { id: 1, title: "Product Manager", category: "Product" },
-  { id: 2, title: "UX Designer", category: "Design" },
-  { id: 3, title: "Frontend Engineer", category: "Engineering" },
-  { id: 4, title: "Backend Engineer", category: "Engineering" },
-  { id: 5, title: "Product Designer", category: "Design" },
-];
+
 
 const Index = () => {
   const [filter, setFilter] = useState("All");
 
-  const filteredJobs = filter === "All" ? jobList : jobList.filter(job => job.category === filter);
+  const { data: jobList, isLoading, isError } = useJobs(); // Fetch jobs from Supabase
+
+  if (isLoading) {
+    return <Text>Loading...</Text>;
+  }
+
+  if (isError) {
+    return <Text>Error loading jobs</Text>;
+  }
+
+  const filteredJobs = filter === "All" ? jobList : jobList.filter(job => job.job_area === filter);
 
   return (
     <Container maxW="container.lg" py={10}>
@@ -29,8 +34,8 @@ const Index = () => {
           {filteredJobs.map(job => (
             <Link to={`/job/${job.id}`} key={job.id}> {/* Wrap job box with Link */}
               <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-                <Text fontSize="xl" fontWeight="bold">{job.title}</Text>
-                <Text mt={2}>{job.category}</Text>
+                <Text fontSize="xl" fontWeight="bold">{job.jobs_title}</Text>
+                <Text mt={2}>{job.job_area}</Text>
               </Box>
             </Link>
           ))}
